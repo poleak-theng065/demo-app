@@ -4,16 +4,10 @@ backend:
   branch: main
   base_url: https://sveltia-cms-auth.pages.dev
 
-# Uncomment below to enable local backend for development
-# local_backend: true
-
 media_folder: "public/images"
 public_folder: "/images"
 
-site_url: https://poleak-theng065.github.io/demo-app
-display_url: https://poleak-theng065.github.io/demo-app
-
-logo_url: /demo-app/images/logo.png
+logo_url: /images/logo.png
 
 collections:
   - name: "blog"

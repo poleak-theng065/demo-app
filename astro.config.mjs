@@ -3,7 +3,6 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://poleak-theng065.github.io',
-  base: '/demo-app',
+  site: 'https://demo-app.netlify.app',
   integrations: [mdx()],
 });
