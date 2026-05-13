@@ -1,0 +1,54 @@
+backend:
+  name: github
+  repo: poleak-theng065/demo-app
+  branch: main
+  base_url: https://sveltia-cms-auth.pages.dev
+
+# Uncomment below to enable local backend for development
+# local_backend: true
+
+media_folder: "public/images"
+public_folder: "/images"
+
+site_url: https://poleak-theng065.github.io/demo-app
+display_url: https://poleak-theng065.github.io/demo-app
+
+logo_url: /demo-app/images/logo.png
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    label_singular: "Blog Post"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
+      - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
+      - { label: "Tags", name: "tags", widget: "list", default: ["general"] }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "Pages"
+    label_singular: "Page"
+    folder: "src/content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "General Settings"
+        name: "general"
+        file: "src/content/settings/general.json"
+        fields:
+          - { label: "Site Title", name: "siteTitle", widget: "string", default: "Demo App" }
+          - { label: "Site Description", name: "siteDescription", widget: "string" }
+          - { label: "Hero Headline", name: "heroHeadline", widget: "string" }
+          - { label: "Hero Subtext", name: "heroSubtext", widget: "text" }

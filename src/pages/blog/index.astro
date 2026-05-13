@@ -1,0 +1,179 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const base = import.meta.env.BASE_URL;
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Layout title="Blog">
+  <div class="blog-page">
+    <div class="blog-header">
+      <h1>Blog</h1>
+      <p>All posts managed via <a href={`${base}admin/`}>Decap CMS</a>.</p>
+    </div>
+
+    {posts.length === 0 ? (
+      <div class="empty-state">
+        <div class="empty-icon">📝</div>
+        <h2>No posts yet</h2>
+        <p>Create your first post in the <a href={`${base}admin/`}>Admin Panel</a>.</p>
+      </div>
+    ) : (
+      <div class="posts-list">
+        {posts.map(post => (
+          <a href={`${base}blog/${post.slug}`} class="post-row">
+            <div class="post-left">
+              <div class="post-tags">
+                {post.data.tags.slice(0,2).map(tag => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+              <h2 class="post-title">{post.data.title}</h2>
+              <p class="post-desc">{post.data.description}</p>
+            </div>
+            <div class="post-right">
+              <time datetime={post.data.pubDate.toISOString()}>
+                {formatDate(post.data.pubDate)}
+              </time>
+              <span class="arrow">→</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .blog-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .blog-header {
+    margin-bottom: 4rem;
+  }
+
+  .blog-header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .blog-header a { color: var(--accent); }
+
+  .empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  .empty-state h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state p { color: var(--text-muted); }
+  .empty-state a { color: var(--accent); }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .post-row:hover { padding-left: 0.5rem; }
+  .post-row:hover .post-title { color: var(--accent); }
+  .post-row:hover .arrow { transform: translateX(4px); }
+
+  .post-left { flex: 1; }
+
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tag {
+    background: rgba(124,106,247,0.12);
+    color: var(--accent);
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .post-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .post-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .post-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .post-right time {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .arrow {
+    color: var(--accent);
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+
+  @media (max-width: 600px) {
+    .post-row { flex-direction: column; gap: 0.75rem; }
+    .post-right { flex-direction: row; align-items: center; }
+  }
+</style>
